@@ -1,60 +1,84 @@
 ﻿using System;
 
-
-// to use the SinglTone i do not recomend because it is like global variable but hidden in class  
-
-
-
-namespace SinglTone
+namespace FactoryMethod
 {
 
 
+    abstract class Furniture
 
-    class Singleton
     {
+    }
 
-        private static Singleton _pointer = null;
 
-        private Singleton()
+
+    class Chair : Furniture
+
+    {
+    }
+
+
+
+    class ArmChair : Furniture
+
+    {
+    }
+
+
+    abstract class CreatorFurniture
+
+    {
+        public abstract Furniture FactoryMethod();
+    }
+
+
+    class ChairCreator : CreatorFurniture
+
+    {
+        public override Furniture FactoryMethod()
         {
+            return new Chair();
         }
+    }
 
-        public static Singleton getPointerToSinleTone
+    class ArmChairCreator : CreatorFurniture
+
+    {
+        public override Furniture FactoryMethod()
         {
-            get
-            {
-
-                if (_pointer == null)
-                {
-                    _pointer = new Singleton();
-                }
-
-                return _pointer;
-            }
+            return new ArmChair();
         }
     }
 
 
 
 
-    class Program
+    class MainApp
+
     {
-        static void Main(string[] args)
+   
+        static void Main()
         {
-            Singleton s1 = Singleton.getPointerToSinleTone;
-            Singleton s2 = Singleton.getPointerToSinleTone;
+          
 
-            // s1 and s2 are equals
+            CreatorFurniture[] creators = new CreatorFurniture[2];
 
-            if (Object.ReferenceEquals(s1, s2))
+            creators[0] = new ChairCreator();
+            creators[1] = new ArmChairCreator();
+
+
+            foreach (CreatorFurniture creator in creators)
             {
-                Console.WriteLine("Singleton is working");
+                Furniture furniture  = creator.FactoryMethod();
+                Console.WriteLine("Created {0}",
+                  furniture.GetType().Name);
             }
-            else
-            {
 
-                Console.WriteLine("Singleton does not work");
-            }
+  
+
+            Console.ReadKey();
         }
     }
+
+
+
 }
