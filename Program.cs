@@ -1,84 +1,60 @@
 ﻿using System;
 
-namespace FactoryMethod
+
+// to use the SinglTone i do not recomend because it is like global variable but hidden in class  
+
+
+
+namespace SinglTone
 {
 
 
-    abstract class Furniture
 
+    class Singleton
     {
-    }
 
+        private static Singleton _pointer = null;
 
-
-    class Chair : Furniture
-
-    {
-    }
-
-
-
-    class ArmChair : Furniture
-
-    {
-    }
-
-
-    abstract class CreatorFurniture
-
-    {
-        public abstract Furniture FactoryMethod();
-    }
-
-
-    class ChairCreator : CreatorFurniture
-
-    {
-        public override Furniture FactoryMethod()
+        private Singleton()
         {
-            return new Chair();
         }
-    }
 
-    class ArmChairCreator : CreatorFurniture
-
-    {
-        public override Furniture FactoryMethod()
+        public static Singleton getPointerToSinleTone
         {
-            return new ArmChair();
-        }
-    }
-
-
-
-
-    class MainApp
-
-    {
-   
-        static void Main()
-        {
-          
-
-            CreatorFurniture[] creators = new CreatorFurniture[2];
-
-            creators[0] = new ChairCreator();
-            creators[1] = new ArmChairCreator();
-
-
-            foreach (CreatorFurniture creator in creators)
+            get
             {
-                Furniture furniture  = creator.FactoryMethod();
-                Console.WriteLine("Created {0}",
-                  furniture.GetType().Name);
+
+                if (_pointer == null)
+                {
+                    _pointer = new Singleton();
+                }
+
+                return _pointer;
             }
-
-  
-
-            Console.ReadKey();
         }
     }
 
 
 
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Singleton s1 = Singleton.getPointerToSinleTone;
+            Singleton s2 = Singleton.getPointerToSinleTone;
+
+            // s1 and s2 are equals
+
+            if (Object.ReferenceEquals(s1, s2))
+            {
+                Console.WriteLine("Singleton is working");
+            }
+            else
+            {
+
+                Console.WriteLine("Singleton does not work");
+            }
+        }
+    }
 }
