@@ -1,35 +1,69 @@
 ﻿using System;
 
-namespace _36350Adapter
-{ 
-
-    public interface ITarget
+namespace Facade
+{
+    public class Order
     {
-        int GetRequest();
-    }
+        protected Factory factory;
+        protected Delivery delivery;
+        protected Consulatant consulatnt;
 
-    class Adaptee
-    {
-        public double GetSpecificRequest()
+        public Order(Factory factor, Delivery deliv, Consulatant cons)
         {
-            return 3.14;
+            this.factory = factor;
+            this.delivery = deliv;
+            this.consulatnt = cons;
+        }
+
+     
+        public string Operation()
+        {
+            string result = "The process of making order:\n";
+            result += this.consulatnt.GetOrderFromClient();
+            result += this.factory.CreateProduct();
+            result += this.delivery.DeliveryToClient();
+
+            return result;
         }
     }
 
-  
-    class Adapter : ITarget
+
+
+
+    public class Consulatant
     {
-        private readonly Adaptee _adaptee;
-
-        public Adapter(Adaptee adaptee)
+        public string GetOrderFromClient()
         {
-            this._adaptee = adaptee;
+            return "The order was received by consultant from client \n";
         }
+    }
 
-        public int GetRequest()
+
+
+    public class Delivery
+    {
+        public string DeliveryToClient()
         {
-            int a = (int)_adaptee.GetSpecificRequest();
-            return a;
+            return "The product was delivered\n";
+        }
+    }
+
+
+    public class Factory
+    {
+        public string CreateProduct()
+        {
+            return "The product was created\n";
+        }
+    }
+
+
+    class Client
+    {
+      
+        public static void ClientCode(Order order)
+        {
+            Console.Write(order.Operation());
         }
     }
 
@@ -37,13 +71,12 @@ namespace _36350Adapter
     {
         static void Main(string[] args)
         {
-            Adaptee adaptee = new Adaptee();
-            ITarget target = new Adapter(adaptee);
-            Console.WriteLine("Class adaptee returns double : " + adaptee.GetSpecificRequest());
-            Console.WriteLine("By adapter i have converted double to int : "+ target.GetRequest());
-       
-            
+
+            Factory factory = new Factory();
+            Delivery  delivery  = new Delivery();
+            Consulatant consulatant = new Consulatant();
+            Order order = new Order(factory, delivery, consulatant);
+            Client.ClientCode(order);
         }
     }
 }
-
